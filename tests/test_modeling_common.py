@@ -42,6 +42,7 @@ if is_torch_available():
         MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING,
         MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING,
         MODEL_MAPPING,
+        CharacterCnn,
         AdaptiveEmbedding,
         BertConfig,
         BertModel,
@@ -905,7 +906,9 @@ class ModelTesterMixin:
 
         for model_class in self.all_model_classes:
             model = model_class(config)
-            self.assertIsInstance(model.get_input_embeddings(), (torch.nn.Embedding, AdaptiveEmbedding))
+            self.assertIsInstance(
+                model.get_input_embeddings(),
+                (torch.nn.Embedding, AdaptiveEmbedding, CharacterCnn))
             model.set_input_embeddings(torch.nn.Embedding(10, 10))
             x = model.get_output_embeddings()
             self.assertTrue(x is None or isinstance(x, torch.nn.Linear))
