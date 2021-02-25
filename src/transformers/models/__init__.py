@@ -47,6 +47,7 @@ from . import (
     lxmert,
     marian,
     mbart,
+    megatron,
     mmbt,
     mobilebert,
     mpnet,

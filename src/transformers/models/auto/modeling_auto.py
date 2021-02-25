@@ -21,8 +21,6 @@ from collections import OrderedDict
 from ...configuration_utils import PretrainedConfig
 from ...file_utils import add_start_docstrings
 from ...utils import logging
-
-# Add modeling imports here
 from ..albert.modeling_albert import (
     AlbertForMaskedLM,
     AlbertForMultipleChoice,
@@ -66,8 +64,6 @@ from ..camembert.modeling_camembert import (
     CamembertForTokenClassification,
     CamembertModel,
 )
-
-# Add modeling imports here
 from ..convbert.modeling_convbert import (
     ConvBertForMaskedLM,
     ConvBertForMultipleChoice,
@@ -157,6 +153,14 @@ from ..mbart.modeling_mbart import (
     MBartForQuestionAnswering,
     MBartForSequenceClassification,
     MBartModel,
+)
+
+# Add modeling imports here
+# Add modeling imports here
+from ..megatron.modeling_megatron import (
+    MegatronForCausalLM,
+    MegatronForSequenceClassification,
+    MegatronModel,
 )
 from ..mobilebert.modeling_mobilebert import (
     MobileBertForMaskedLM,
@@ -276,6 +280,7 @@ from .configuration_auto import (
     LxmertConfig,
     MarianConfig,
     MBartConfig,
+    MegatronConfig,
     MobileBertConfig,
     MPNetConfig,
     MT5Config,
@@ -304,6 +309,7 @@ logger = logging.get_logger(__name__)
 MODEL_MAPPING = OrderedDict(
     [
         # Base model mapping
+        (MegatronConfig, MegatronModel),
         (Wav2Vec2Config, Wav2Vec2Model),
         (ConvBertConfig, ConvBertModel),
         (LEDConfig, LEDModel),
@@ -424,6 +430,7 @@ MODEL_WITH_LM_HEAD_MAPPING = OrderedDict(
 MODEL_FOR_CAUSAL_LM_MAPPING = OrderedDict(
     [
         # Model for Causal LM mapping
+        (MegatronConfig, MegatronForCausalLM),
         (CamembertConfig, CamembertForCausalLM),
         (XLMRobertaConfig, XLMRobertaForCausalLM),
         (RobertaConfig, RobertaForCausalLM),
@@ -501,6 +508,7 @@ MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING = OrderedDict(
 MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING = OrderedDict(
     [
         # Model for Sequence Classification mapping
+        (MegatronConfig, MegatronForSequenceClassification),
         (ConvBertConfig, ConvBertForSequenceClassification),
         (LEDConfig, LEDForSequenceClassification),
         (DistilBertConfig, DistilBertForSequenceClassification),

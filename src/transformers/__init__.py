@@ -125,6 +125,7 @@ _import_structure = {
     ],
     "models": [],
     # Models
+    "models.megatron": ["MEGATRON_PRETRAINED_CONFIG_ARCHIVE_MAP", "MegatronConfig", "MegatronTokenizer"],
     "models.wav2vec2": ["WAV_2_VEC_2_PRETRAINED_CONFIG_ARCHIVE_MAP", "Wav2Vec2Config", "Wav2Vec2Tokenizer"],
     "models.convbert": ["CONVBERT_PRETRAINED_CONFIG_ARCHIVE_MAP", "ConvBertConfig", "ConvBertTokenizer"],
     "models.albert": ["ALBERT_PRETRAINED_CONFIG_ARCHIVE_MAP", "AlbertConfig"],
@@ -279,6 +280,7 @@ else:
 # tokenziers-backed objects
 if is_tokenizers_available():
     # Fast tokenizers
+    _import_structure["models.megatron"].append("MegatronTokenizerFast")
     _import_structure["models.convbert"].append("ConvBertTokenizerFast")
     _import_structure["models.albert"].append("AlbertTokenizerFast")
     _import_structure["models.bart"].append("BartTokenizerFast")
@@ -366,6 +368,15 @@ if is_torch_available():
     _import_structure["generation_utils"] = ["top_k_top_p_filtering"]
     _import_structure["modeling_utils"] = ["Conv1D", "PreTrainedModel", "apply_chunking_to_forward", "prune_layer"]
     # PyTorch models structure
+
+    _import_structure["models.megatron"].extend(
+        [
+            "MEGATRON_PRETRAINED_MODEL_ARCHIVE_LIST",
+            "MegatronForCausalLM",
+            "MegatronForSequenceClassification",
+            "MegatronModel",
+        ]
+    )
 
     _import_structure["models.wav2vec2"].extend(
         [
@@ -1322,6 +1333,7 @@ if TYPE_CHECKING:
     from .models.lxmert import LXMERT_PRETRAINED_CONFIG_ARCHIVE_MAP, LxmertConfig, LxmertTokenizer
     from .models.marian import MarianConfig
     from .models.mbart import MBartConfig
+    from .models.megatron import MEGATRON_PRETRAINED_CONFIG_ARCHIVE_MAP, MegatronConfig, MegatronTokenizer
     from .models.mmbt import MMBTConfig
     from .models.mobilebert import MOBILEBERT_PRETRAINED_CONFIG_ARCHIVE_MAP, MobileBertConfig, MobileBertTokenizer
     from .models.mpnet import MPNET_PRETRAINED_CONFIG_ARCHIVE_MAP, MPNetConfig, MPNetTokenizer
@@ -1435,6 +1447,7 @@ if TYPE_CHECKING:
         from .models.longformer import LongformerTokenizerFast
         from .models.lxmert import LxmertTokenizerFast
         from .models.mbart import MBart50TokenizerFast, MBartTokenizerFast
+        from .models.megatron import MegatronTokenizerFast
         from .models.mobilebert import MobileBertTokenizerFast
         from .models.mpnet import MPNetTokenizerFast
         from .models.mt5 import MT5TokenizerFast
@@ -1732,6 +1745,12 @@ if TYPE_CHECKING:
             MBartForQuestionAnswering,
             MBartForSequenceClassification,
             MBartModel,
+        )
+        from .models.megatron import (
+            MEGATRON_PRETRAINED_MODEL_ARCHIVE_LIST,
+            MegatronForCausalLM,
+            MegatronForSequenceClassification,
+            MegatronModel,
         )
         from .models.mmbt import MMBTForClassification, MMBTModel, ModalEmbeddings
         from .models.mobilebert import (
