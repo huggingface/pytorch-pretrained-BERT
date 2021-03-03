@@ -126,8 +126,19 @@ _import_structure = {
     ],
     "models": [],
     # Models
-    "models.character_bert": ["CHARACTER_BERT_PRETRAINED_CONFIG_ARCHIVE_MAP", "CharacterBertConfig", "CharacterBertTokenizer"],
-    "models.wav2vec2": ["WAV_2_VEC_2_PRETRAINED_CONFIG_ARCHIVE_MAP", "Wav2Vec2Config", "Wav2Vec2Tokenizer"],
+    "models.character_bert": [
+        "CHARACTER_BERT_PRETRAINED_CONFIG_ARCHIVE_MAP",
+        "CharacterBertConfig",
+        "CharacterBertTokenizer"
+    ],
+    "models.wav2vec2": [
+        "WAV_2_VEC_2_PRETRAINED_CONFIG_ARCHIVE_MAP",
+        "Wav2Vec2Config",
+        "Wav2Vec2CTCTokenizer",
+        "Wav2Vec2Tokenizer",
+        "Wav2Vec2FeatureExtractor",
+        "Wav2Vec2Processor",
+    ],
     "models.convbert": ["CONVBERT_PRETRAINED_CONFIG_ARCHIVE_MAP", "ConvBertConfig", "ConvBertTokenizer"],
     "models.albert": ["ALBERT_PRETRAINED_CONFIG_ARCHIVE_MAP", "AlbertConfig"],
     "models.auto": [
