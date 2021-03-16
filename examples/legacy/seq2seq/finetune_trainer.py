@@ -178,6 +178,8 @@ def main():
     transformers.utils.logging.enable_default_handler()
     transformers.utils.logging.enable_explicit_format()
     # Set the verbosity to info of the Transformers logger (on main process only):
+    transformers.utils.logging.enable_default_handler()
+    transformers.utils.logging.enable_explicit_format()
     if is_main_process(training_args.local_rank):
         transformers.utils.logging.set_verbosity_info()
     logger.info("Training/evaluation parameters %s", training_args)
