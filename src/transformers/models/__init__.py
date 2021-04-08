@@ -34,6 +34,7 @@ from . import (
     ctrl,
     deberta,
     deit,
+    detr,
     dialogpt,
     distilbert,
     dpr,
