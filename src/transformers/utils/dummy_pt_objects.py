@@ -334,6 +334,9 @@ MODEL_FOR_MULTIPLE_CHOICE_MAPPING = None
 MODEL_FOR_NEXT_SENTENCE_PREDICTION_MAPPING = None
 
 
+MODEL_FOR_OBJECT_DETECTION_MAPPING = None
+
+
 MODEL_FOR_PRETRAINING_MAPPING = None
 
 
@@ -1067,6 +1070,10 @@ DEIT_PRETRAINED_MODEL_ARCHIVE_LIST = None
 
 
 class DeiTForImageClassification:
+DETR_PRETRAINED_MODEL_ARCHIVE_LIST = None
+
+
+class DetrForObjectDetection:
     def __init__(self, *args, **kwargs):
         requires_backends(self, ["torch"])
 
@@ -1086,6 +1093,7 @@ class DeiTModel:
 
 
 class DeiTPreTrainedModel:
+class DetrModel:
     def __init__(self, *args, **kwargs):
         requires_backends(self, ["torch"])
 
