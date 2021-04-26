@@ -1796,9 +1796,8 @@ class GenerationMixin:
                 next_token_logits, cur_len=cur_len, max_length=None
             )
 
-            next_token_scores = F.log_softmax(next_token_logits, dim=-1)  # (batch_size * num_beams, vocab_size)
-
-            next_token_scores = logits_processor(input_ids, next_token_scores)
+            next_token_scores = logits_processor(input_ids, next_token_logits)
+            next_token_scores = F.log_softmax(next_token_scores, dim=-1)  # (batch_size * num_beams, vocab_size)
             next_token_scores = next_token_scores + beam_scores[:, None].expand_as(next_token_scores)
 
             # Store scores, attentions and hidden_states when required
@@ -2090,9 +2089,8 @@ class GenerationMixin:
                 next_token_logits, cur_len=cur_len, max_length=None
             )
 
-            next_token_scores = F.log_softmax(next_token_logits, dim=-1)  # (batch_size * num_beams, vocab_size)
-
-            next_token_scores = logits_processor(input_ids, next_token_scores)
+            next_token_scores = logits_processor(input_ids, next_token_logits)
+            next_token_scores = F.log_softmax(next_token_scores, dim=-1)  # (batch_size * num_beams, vocab_size)
             next_token_scores = next_token_scores + beam_scores[:, None].expand_as(next_token_scores)
             next_token_scores = logits_warper(input_ids, next_token_scores)
 
@@ -2415,12 +2413,12 @@ class GenerationMixin:
                     next_token_logits, cur_len=cur_len, max_length=None
                 )
 
-                next_token_scores = F.log_softmax(next_token_logits, dim=-1)  # (batch_size * group_size, vocab_size)
-                vocab_size = next_token_scores.shape[-1]
+                vocab_size = next_token_logits.shape[-1]
 
                 next_token_scores = logits_processor(
-                    group_input_ids, next_token_scores, current_tokens=current_tokens, beam_group_idx=beam_group_idx
+                    group_input_ids, next_token_logits, current_tokens=current_tokens, beam_group_idx=beam_group_idx
                 )
+                next_token_scores = F.log_softmax(next_token_scores, dim=-1)  # (batch_size * group_size, vocab_size)
                 next_token_scores = next_token_scores + beam_scores[batch_group_indices].unsqueeze(-1).expand_as(
                     next_token_scores
                 )
