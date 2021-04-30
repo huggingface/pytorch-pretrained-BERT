@@ -49,7 +49,7 @@ class AutomaticSpeechRecognitionPipelineTests(unittest.TestCase):
     def test_torch_large(self):
         import numpy as np
 
-        nlp = pipeline(
+        speech_recognizer = pipeline(
             task="automatic-speech-recognition",
             model="facebook/wav2vec2-base-960h",
             tokenizer="facebook/wav2vec2-base-960h",
