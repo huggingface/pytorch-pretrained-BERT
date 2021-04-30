@@ -383,11 +383,9 @@ def pipeline(
             )
 
     modelcard = None
-    model_id = None
     # Try to infer modelcard from model or config name (if provided as str)
     if isinstance(model, str):
         modelcard = model
-        model_id = model
     elif isinstance(config, str):
         modelcard = config
 
@@ -446,15 +444,15 @@ def pipeline(
             raise ValueError(
                 f"Pipeline using {framework} framework, but this framework is not supported by this pipeline."
             )
-        elif model_class == "config" and isinstance(model_id, str):
+        elif model_class == "config":
             if config is None:
-                config = AutoConfig.from_pretrained(model_id, revision=revision, _from_pipeline=task, **model_kwargs)
+                config = AutoConfig.from_pretrained(model, revision=revision, _from_pipeline=task, **model_kwargs)
             try:
                 import transformers
 
                 model_class = getattr(transformers, config.architectures[0])
             except Exception:
-                raise Exception(f"Could not load default model class for {model_id}")
+                raise Exception(f"Could not load default model class for {model}")
 
         model = model_class.from_pretrained(
             model, config=config, revision=revision, _from_pipeline=task, **model_kwargs
