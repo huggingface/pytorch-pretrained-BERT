@@ -40,7 +40,7 @@ class AutomaticSpeechRecognitionPipelineTests(unittest.TestCase):
             framework="pt",
         )
         waveform = np.zeros((34000,))
-        output = nlp(waveform)
+        output = speech_recognizer(waveform)
         self.assertEqual(output, {"text": "C'est ce que j'ai fait à ce moment-là."})
 
     @require_datasets
@@ -56,14 +56,14 @@ class AutomaticSpeechRecognitionPipelineTests(unittest.TestCase):
             framework="pt",
         )
         waveform = np.zeros((34000,))
-        output = nlp(waveform)
+        output = speech_recognizer(waveform)
         self.assertEqual(output, {"text": ""})
 
         from datasets import load_dataset
 
         ds = load_dataset("patrickvonplaten/librispeech_asr_dummy", "clean", split="validation")
         filename = ds[0]["file"]
-        output = nlp(filename)
+        output = speech_recognizer(filename)
         self.assertEqual(output, {"text": "A MAN SAID TO THE UNIVERSE SIR I EXIST"})
 
     @slow
