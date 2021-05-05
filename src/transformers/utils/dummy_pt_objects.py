@@ -1105,6 +1105,11 @@ class DetrForObjectDetection:
         requires_backends(self, ["torch"])
 
 
+class DetrForSegmentation:
+    def __init__(self, *args, **kwargs):
+        requires_backends(self, ["torch"])
+
+
 class DetrModel:
     def __init__(self, *args, **kwargs):
         requires_backends(self, ["torch"])
