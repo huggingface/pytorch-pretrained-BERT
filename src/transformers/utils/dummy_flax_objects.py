@@ -107,6 +107,42 @@ class FlaxAutoModelForTokenClassification:
         requires_backends(self, ["flax"])
 
 
+class FlaxBartForConditionalGeneration:
+    def __init__(self, *args, **kwargs):
+        requires_backends(self, ["flax"])
+
+    @classmethod
+    def from_pretrained(self, *args, **kwargs):
+        requires_backends(self, ["flax"])
+
+
+class FlaxBartForQuestionAnswering:
+    def __init__(self, *args, **kwargs):
+        requires_backends(self, ["flax"])
+
+    @classmethod
+    def from_pretrained(self, *args, **kwargs):
+        requires_backends(self, ["flax"])
+
+
+class FlaxBartForSequenceClassification:
+    def __init__(self, *args, **kwargs):
+        requires_backends(self, ["flax"])
+
+    @classmethod
+    def from_pretrained(self, *args, **kwargs):
+        requires_backends(self, ["flax"])
+
+
+class FlaxBartModel:
+    def __init__(self, *args, **kwargs):
+        requires_backends(self, ["flax"])
+
+    @classmethod
+    def from_pretrained(self, *args, **kwargs):
+        requires_backends(self, ["flax"])
+
+
 class FlaxBertForMaskedLM:
     def __init__(self, *args, **kwargs):
         requires_backends(self, ["flax"])
