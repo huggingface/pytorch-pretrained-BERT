@@ -21,7 +21,6 @@ from typing import TYPE_CHECKING, Any, Dict, Optional, Tuple, Union
 
 from ..configuration_utils import PretrainedConfig
 from ..file_utils import is_tf_available, is_torch_available
-from ..modelcard import ModelCard
 from ..models.auto.tokenization_auto import AutoTokenizer
 from ..tokenization_utils import PreTrainedTokenizer
 from ..utils import logging
@@ -372,13 +371,6 @@ def pipeline(
                 "Please provided a PreTrainedTokenizer class or a path/identifier to a pretrained tokenizer."
             )
 
-    modelcard = None
-    # Try to infer modelcard from model or config name (if provided as str)
-    if isinstance(model, str):
-        modelcard = model
-    elif isinstance(config, str):
-        modelcard = config
-
     # Infer the framework form the model
     if framework is None:
         framework, model = infer_framework_from_model(model, targeted_task, revision=revision, task=task)
@@ -404,10 +396,6 @@ def pipeline(
     # Instantiate config if needed
     if isinstance(config, str):
         config = AutoConfig.from_pretrained(config, revision=revision, _from_pipeline=task, **model_kwargs)
-
-    # Instantiate modelcard if needed
-    if isinstance(modelcard, str):
-        modelcard = ModelCard.from_pretrained(modelcard, revision=revision, _from_pipeline=task)
 
     # Instantiate model if needed
     if isinstance(model, str):
@@ -444,4 +432,4 @@ def pipeline(
                 )
                 break
 
-    return task_class(model=model, tokenizer=tokenizer, modelcard=modelcard, framework=framework, task=task, **kwargs)
+    return task_class(model=model, tokenizer=tokenizer, framework=framework, task=task, **kwargs)
