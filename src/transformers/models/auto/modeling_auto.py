@@ -74,6 +74,7 @@ from ..camembert.modeling_camembert import (
     CamembertForTokenClassification,
     CamembertModel,
 )
+from ..clip.modeling_clip import CLIPModel
 from ..convbert.modeling_convbert import (
     ConvBertForMaskedLM,
     ConvBertForMultipleChoice,
@@ -291,6 +292,7 @@ from .configuration_auto import (
     BlenderbotConfig,
     BlenderbotSmallConfig,
     CamembertConfig,
+    CLIPConfig,
     ConvBertConfig,
     CTRLConfig,
     DebertaConfig,
@@ -344,6 +346,7 @@ logger = logging.get_logger(__name__)
 MODEL_MAPPING = OrderedDict(
     [
         # Base model mapping
+        (CLIPConfig, CLIPModel),
         (DeiTConfig, DeiTModel),
         (LukeConfig, LukeModel),
         (GPTNeoConfig, GPTNeoModel),
