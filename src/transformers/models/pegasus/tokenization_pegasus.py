@@ -111,7 +111,7 @@ class PegasusTokenizer(PreTrainedTokenizer):
         additional_special_tokens=None,
         sp_model_kwargs: Optional[Dict[str, Any]] = None,
         **kwargs
-    ):
+    ) -> None:
         if additional_special_tokens is not None:
             assert isinstance(
                 additional_special_tokens, list
