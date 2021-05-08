@@ -16,7 +16,6 @@ import dataclasses
 import io
 import json
 import os
-import unittest
 from copy import deepcopy
 
 from parameterized import parameterized
@@ -30,6 +29,7 @@ from transformers.testing_utils import (
     execute_subprocess_async,
     get_gpu_count,
     mockenv_context,
+    require_deepspeed,
     require_torch_gpu,
     require_torch_multi_gpu,
     slow,
@@ -54,17 +54,6 @@ T5_TINY = "patrickvonplaten/t5-tiny-random"
 def load_json(path):
     with open(path) as f:
         return json.load(f)
-
-
-# a candidate for testing_utils
-def require_deepspeed(test_case):
-    """
-    Decorator marking a test that requires deepspeed
-    """
-    if not is_deepspeed_available():
-        return unittest.skip("test requires deepspeed")(test_case)
-    else:
-        return test_case
 
 
 if is_deepspeed_available():
@@ -740,8 +729,6 @@ class TestDeepSpeedWithLauncher(TestCasePlus):
         # keep for quick debug
         # print(" ".join([f"\nPYTHONPATH={self.src_dir_str}"] +cmd)); die
         execute_subprocess_async(cmd, env=self.get_env())
-
-        return output_dir
 
     def get_launcher(self, distributed=False):
         # 1. explicitly set --num_nodes=1 just in case these tests end up run on a multi-node setup
