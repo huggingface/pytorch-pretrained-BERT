@@ -12,17 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import json
+import os
 import unittest
 
-from transformers import AutoTokenizer, is_torch_available, pipeline
+import numpy as np
+
+from transformers import AutoTokenizer, pipeline
 from transformers.pipelines import Pipeline, TokenClassificationArgumentHandler
 from transformers.testing_utils import require_tf, require_torch, slow
 
 from .test_pipelines_common import CustomInputPipelineCommonMixin
 
-
-if is_torch_available():
-    import numpy as np
 
 VALID_INPUTS = ["A simple string", ["list of strings", "A simple string that is quite a bit longer"]]
 
@@ -39,156 +40,17 @@ class TokenClassificationPipelineTests(CustomInputPipelineCommonMixin, unittest.
         if nlp.grouped_entities:
             output_keys = {"entity_group", "word", "score", "start", "end"}
 
-        ungrouped_ner_inputs = [
-            [
-                {
-                    "entity": "B-PER",
-                    "index": 1,
-                    "score": 0.9994944930076599,
-                    "is_subword": False,
-                    "word": "Cons",
-                    "start": 0,
-                    "end": 4,
-                },
-                {
-                    "entity": "B-PER",
-                    "index": 2,
-                    "score": 0.8025449514389038,
-                    "is_subword": True,
-                    "word": "##uelo",
-                    "start": 4,
-                    "end": 8,
-                },
-                {
-                    "entity": "I-PER",
-                    "index": 3,
-                    "score": 0.9993102550506592,
-                    "is_subword": False,
-                    "word": "Ara",
-                    "start": 9,
-                    "end": 11,
-                },
-                {
-                    "entity": "I-PER",
-                    "index": 4,
-                    "score": 0.9993743896484375,
-                    "is_subword": True,
-                    "word": "##új",
-                    "start": 11,
-                    "end": 13,
-                },
-                {
-                    "entity": "I-PER",
-                    "index": 5,
-                    "score": 0.9992871880531311,
-                    "is_subword": True,
-                    "word": "##o",
-                    "start": 13,
-                    "end": 14,
-                },
-                {
-                    "entity": "I-PER",
-                    "index": 6,
-                    "score": 0.9993029236793518,
-                    "is_subword": False,
-                    "word": "No",
-                    "start": 15,
-                    "end": 17,
-                },
-                {
-                    "entity": "I-PER",
-                    "index": 7,
-                    "score": 0.9981776475906372,
-                    "is_subword": True,
-                    "word": "##guera",
-                    "start": 17,
-                    "end": 22,
-                },
-                {
-                    "entity": "B-PER",
-                    "index": 15,
-                    "score": 0.9998136162757874,
-                    "is_subword": False,
-                    "word": "Andrés",
-                    "start": 23,
-                    "end": 28,
-                },
-                {
-                    "entity": "I-PER",
-                    "index": 16,
-                    "score": 0.999740719795227,
-                    "is_subword": False,
-                    "word": "Pas",
-                    "start": 29,
-                    "end": 32,
-                },
-                {
-                    "entity": "I-PER",
-                    "index": 17,
-                    "score": 0.9997414350509644,
-                    "is_subword": True,
-                    "word": "##tran",
-                    "start": 32,
-                    "end": 36,
-                },
-                {
-                    "entity": "I-PER",
-                    "index": 18,
-                    "score": 0.9996136426925659,
-                    "is_subword": True,
-                    "word": "##a",
-                    "start": 36,
-                    "end": 37,
-                },
-                {
-                    "entity": "B-ORG",
-                    "index": 28,
-                    "score": 0.9989739060401917,
-                    "is_subword": False,
-                    "word": "Far",
-                    "start": 39,
-                    "end": 42,
-                },
-                {
-                    "entity": "I-ORG",
-                    "index": 29,
-                    "score": 0.7188422083854675,
-                    "is_subword": True,
-                    "word": "##c",
-                    "start": 42,
-                    "end": 43,
-                },
-            ],
-            [
-                {
-                    "entity": "I-PER",
-                    "index": 1,
-                    "score": 0.9968166351318359,
-                    "is_subword": False,
-                    "word": "En",
-                    "start": 0,
-                    "end": 2,
-                },
-                {
-                    "entity": "I-PER",
-                    "index": 2,
-                    "score": 0.9957635998725891,
-                    "is_subword": True,
-                    "word": "##zo",
-                    "start": 2,
-                    "end": 4,
-                },
-                {
-                    "entity": "I-ORG",
-                    "index": 7,
-                    "score": 0.9986497163772583,
-                    "is_subword": False,
-                    "word": "UN",
-                    "start": 11,
-                    "end": 13,
-                },
-            ],
-        ]
+        ungrouped_ner_inputs_filepath = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "fixtures/ner_pipeline_inputs.json"
+        )
+        with open(ungrouped_ner_inputs_filepath) as ungrouped_ner_inputs_file:
+            ungrouped_ner_inputs = json.load(ungrouped_ner_inputs_file)
+
+        ungrouped_inputs_all_scores_filepath = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "fixtures/ner_pipeline_inputs_all_scores.json"
+        )
+        with open(ungrouped_inputs_all_scores_filepath) as ungrouped_inputs_all_scores_file:
+            ungrouped_inputs_all_scores = json.load(ungrouped_inputs_all_scores_file)
 
         expected_grouped_ner_results = [
             [
@@ -239,6 +101,18 @@ class TokenClassificationPipelineTests(CustomInputPipelineCommonMixin, unittest.
             ],
         ]
 
+        expected_aligned_results_filepath = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "fixtures/ner_pipeline_aligned.json"
+        )
+        with open(expected_aligned_results_filepath) as expected_aligned_results_file:
+            expected_aligned_results = json.load(expected_aligned_results_file)
+
+        expected_aligned_results_w_subword_filepath = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "fixtures/ner_pipeline_aligned_w_subwords.json"
+        )
+        with open(expected_aligned_results_w_subword_filepath) as expected_aligned_results_w_subword_file:
+            expected_aligned_results_w_subword = json.load(expected_aligned_results_w_subword_file)
+
         self.assertIsNotNone(nlp)
 
         mono_result = nlp(VALID_INPUTS[0])
@@ -271,6 +145,11 @@ class TokenClassificationPipelineTests(CustomInputPipelineCommonMixin, unittest.
                     ungrouped_ner_inputs, expected_grouped_ner_results_w_subword
                 ):
                     self.assertEqual(nlp.group_entities(ungrouped_input), grouped_result)
+        aligned_results = nlp.set_subwords_label(ungrouped_inputs_all_scores)
+        if nlp.ignore_subwords:
+            self.assertEqual(aligned_results, expected_aligned_results[nlp.aggregation_strategy.value])
+        else:
+            self.assertEqual(aligned_results, expected_aligned_results_w_subword[nlp.aggregation_strategy.value])
 
     @require_tf
     def test_tf_only(self):
@@ -311,6 +190,35 @@ class TokenClassificationPipelineTests(CustomInputPipelineCommonMixin, unittest.
                 ignore_subwords=False,
             )
             self._test_pipeline(nlp)
+
+        for model_name in self.small_models:
+            tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+            nlp = pipeline(task="ner", model=model_name, tokenizer=tokenizer, framework="tf")
+        self._test_pipeline(nlp)
+
+    @require_tf
+    def test_tf_small_subwords_aggregation_available_for_fast_tokenizers(self):
+        for model_name in self.small_models:
+            tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+            for strategy in ["first", "max", "average"]:
+                nlp = pipeline(
+                    task="ner",
+                    model=model_name,
+                    tokenizer=tokenizer,
+                    framework="tf",
+                    aggregation_strategy=strategy,
+                    ignore_subwords=True,
+                )
+                self._test_pipeline(nlp)
+                nlp = pipeline(
+                    task="ner",
+                    model=model_name,
+                    tokenizer=tokenizer,
+                    framework="tf",
+                    aggregation_strategy=strategy,
+                    ignore_subwords=False,
+                )
+                self._test_pipeline(nlp)
 
     @require_torch
     def test_pt_ignore_subwords_slow_tokenizer_raises(self):
