@@ -83,17 +83,15 @@ def infer_framework_from_model(
         )
     if isinstance(model, str):
         model_kwargs["_from_pipeline"] = task
-        if is_torch_available() and not is_tf_available():
-            model_class = model_classes.get("pt", AutoModel)
-            model = model_class.from_pretrained(model, **model_kwargs)
-        elif is_tf_available() and not is_torch_available():
-            model_class = model_classes.get("tf", TFAutoModel)
-            model = model_class.from_pretrained(model, **model_kwargs)
+        if is_torch_available():
+            framework, autoclass = "pt", AutoModel
         else:
-            try:
-                model_class = model_classes.get("pt", AutoModel)
-                model = model_class.from_pretrained(model, **model_kwargs)
-            except OSError:
+            framework, autoclass = "tf", TFAutoModel
+        try:
+            model_class = model_classes.get(framework, autoclass)
+            model = model_class.from_pretrained(model, **model_kwargs)
+        except OSError:
+            if framework == "pt" and is_tf_available():
                 model_class = model_classes.get("tf", TFAutoModel)
                 model = model_class.from_pretrained(model, **model_kwargs)
 
