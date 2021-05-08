@@ -411,7 +411,6 @@ class AlbertConverter(SpmConverter):
         list_normalizers = [
             normalizers.Replace("``", '"'),
             normalizers.Replace("''", '"'),
-            normalizers.Replace(Regex(" {2,}"), " "),
         ]
         if not self.original_tokenizer.keep_accents:
             list_normalizers.append(normalizers.NFKD())
@@ -421,6 +420,7 @@ class AlbertConverter(SpmConverter):
 
         precompiled_charsmap = proto.normalizer_spec.precompiled_charsmap
         list_normalizers.append(normalizers.Precompiled(precompiled_charsmap))
+        list_normalizers.append(normalizers.Replace(Regex(" {2,}"), " "))
         return normalizers.Sequence(list_normalizers)
 
     def post_processor(self):
@@ -599,7 +599,6 @@ class XLNetConverter(SpmConverter):
         list_normalizers = [
             normalizers.Replace("``", '"'),
             normalizers.Replace("''", '"'),
-            normalizers.Replace(Regex(" {2,}"), " "),
         ]
         if not self.original_tokenizer.keep_accents:
             list_normalizers.append(normalizers.NFKD())
@@ -609,6 +608,7 @@ class XLNetConverter(SpmConverter):
 
         precompiled_charsmap = proto.normalizer_spec.precompiled_charsmap
         list_normalizers.append(normalizers.Precompiled(precompiled_charsmap))
+        list_normalizers.append(normalizers.Replace(Regex(" {2,}"), " "))
         return normalizers.Sequence(list_normalizers)
 
     def post_processor(self):
