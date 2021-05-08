@@ -180,7 +180,6 @@ class RobertaSelfAttention(nn.Module):
         attention_mask=None,
         head_mask=None,
         encoder_hidden_states=None,
-        encoder_attention_mask=None,
         past_key_value=None,
         output_attentions=False,
     ):
@@ -195,11 +194,9 @@ class RobertaSelfAttention(nn.Module):
             # reuse k,v, cross_attentions
             key_layer = past_key_value[0]
             value_layer = past_key_value[1]
-            attention_mask = encoder_attention_mask
         elif is_cross_attention:
             key_layer = self.transpose_for_scores(self.key(encoder_hidden_states))
             value_layer = self.transpose_for_scores(self.value(encoder_hidden_states))
-            attention_mask = encoder_attention_mask
         elif past_key_value is not None:
             key_layer = self.transpose_for_scores(self.key(hidden_states))
             value_layer = self.transpose_for_scores(self.value(hidden_states))
@@ -315,8 +312,6 @@ class RobertaAttention(nn.Module):
         hidden_states,
         attention_mask=None,
         head_mask=None,
-        encoder_hidden_states=None,
-        encoder_attention_mask=None,
         past_key_value=None,
         output_attentions=False,
     ):
@@ -324,8 +319,6 @@ class RobertaAttention(nn.Module):
             hidden_states,
             attention_mask,
             head_mask,
-            encoder_hidden_states,
-            encoder_attention_mask,
             past_key_value,
             output_attentions,
         )
@@ -418,10 +411,9 @@ class RobertaLayer(nn.Module):
             cross_attn_past_key_value = past_key_value[-2:] if past_key_value is not None else None
             cross_attention_outputs = self.crossattention(
                 attention_output,
-                attention_mask,
+                encoder_attention_mask,
                 head_mask,
                 encoder_hidden_states,
-                encoder_attention_mask,
                 cross_attn_past_key_value,
                 output_attentions,
             )
