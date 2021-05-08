@@ -50,6 +50,7 @@ from ...modeling_tf_utils import (
     shape_list,
 )
 from ...utils import logging
+from ..bert.modeling_tf_bert import WordEmbeddings
 from .configuration_mpnet import MPNetConfig
 
 
@@ -102,20 +103,32 @@ class TFMPNetEmbeddings(tf.keras.layers.Layer):
         self.LayerNorm = tf.keras.layers.LayerNormalization(epsilon=config.layer_norm_eps, name="LayerNorm")
         self.dropout = tf.keras.layers.Dropout(rate=config.hidden_dropout_prob)
 
-    def build(self, input_shape: tf.TensorShape):
-        with tf.name_scope("word_embeddings"):
-            self.weight = self.add_weight(
-                name="weight",
-                shape=[self.vocab_size, self.hidden_size],
-                initializer=get_initializer(initializer_range=self.initializer_range),
-            )
+        self.word_embeddings = WordEmbeddings(
+            name="word_embeddings",
+            embedding_name="weight",
+            shape=[self.vocab_size, self.hidden_size],
+            initializer=get_initializer(self.initializer_range),
+        )
 
-        with tf.name_scope("position_embeddings"):
-            self.position_embeddings = self.add_weight(
-                name="embeddings",
-                shape=[self.max_position_embeddings, self.hidden_size],
-                initializer=get_initializer(initializer_range=self.initializer_range),
-            )
+        self.position_embeddings = tf.keras.layers.Embedding(
+            name="position_embeddings",
+            input_dim=self.max_position_embeddings,
+            output_dim=self.hidden_size,
+            embeddings_initializer=get_initializer(self.initializer_range),
+        )
+
+    @property
+    def weight(self):
+        if hasattr(self, "word_embeddings") and hasattr(self.word_embeddings, "weight"):
+            return self.word_embeddings.weight
+        else:
+            return None
+
+    @weight.setter
+    def weight(self, value):
+        self.word_embeddings.weight = value
+
+    def build(self, input_shape: tf.TensorShape):
 
         super().build(input_shape)
 
@@ -143,7 +156,7 @@ class TFMPNetEmbeddings(tf.keras.layers.Layer):
         assert not (input_ids is None and inputs_embeds is None)
 
         if input_ids is not None:
-            inputs_embeds = tf.gather(params=self.weight, indices=input_ids)
+            inputs_embeds = self.word_embeddings(input_ids)
 
         input_shape = shape_list(inputs_embeds)[:-1]
 
@@ -157,7 +170,7 @@ class TFMPNetEmbeddings(tf.keras.layers.Layer):
                 )
                 position_ids = tf.tile(input=position_ids, multiples=(input_shape[0], 1))
 
-        position_embeds = tf.gather(params=self.position_embeddings, indices=position_ids)
+        position_embeds = self.position_embeddings(position_ids)
         final_embeddings = self.embeddings_sum(inputs=[inputs_embeds, position_embeds])
         final_embeddings = self.LayerNorm(inputs=final_embeddings)
         final_embeddings = self.dropout(inputs=final_embeddings, training=training)
@@ -476,7 +489,7 @@ class TFMPNetMainLayer(tf.keras.layers.Layer):
 
     # Copied from transformers.models.bert.modeling_tf_bert.TFBertMainLayer.set_input_embeddings
     def set_input_embeddings(self, value: tf.Variable):
-        self.embeddings.weight = value
+        self.embeddings.word_embeddings.weight = value
         self.embeddings.vocab_size = shape_list(value)[0]
 
     # Copied from transformers.models.bert.modeling_tf_bert.TFBertMainLayer._prune_heads
