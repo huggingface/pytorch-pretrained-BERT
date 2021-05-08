@@ -247,11 +247,11 @@ class FlaxModelTesterMixin:
                 model = model_class(config)
 
                 @jax.jit
-                def model_jitted(input_ids, attention_mask=None, token_type_ids=None):
+                def model_jitted(input_ids, attention_mask=None, **kwargs):
                     return model(
                         input_ids=input_ids,
                         attention_mask=attention_mask,
-                        token_type_ids=token_type_ids,
+                        **kwargs,
                     ).to_tuple()
 
                 with self.subTest("JIT Enabled"):
@@ -266,11 +266,15 @@ class FlaxModelTesterMixin:
                     self.assertEqual(jitted_output.shape, output.shape)
 
                 @jax.jit
-                def model_jitted_return_dict(input_ids, attention_mask=None, token_type_ids=None):
+                def model_jitted_return_dict(
+                    input_ids,
+                    attention_mask=None,
+                    **kwargs,
+                ):
                     return model(
                         input_ids=input_ids,
                         attention_mask=attention_mask,
-                        token_type_ids=token_type_ids,
+                        **kwargs,
                     )
 
                 # jitted function cannot return OrderedDict
