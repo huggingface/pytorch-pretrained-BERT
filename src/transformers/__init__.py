@@ -130,7 +130,7 @@ _import_structure = {
         "load_tf2_weights_in_pytorch_model",
     ],
     # Models
-    "models": [],
+    "models.visual_bert": ["VISUAL_BERT_PRETRAINED_CONFIG_ARCHIVE_MAP", "VisualBertConfig"],
     "models.albert": ["ALBERT_PRETRAINED_CONFIG_ARCHIVE_MAP", "AlbertConfig"],
     "models.auto": [
         "ALL_PRETRAINED_CONFIG_ARCHIVE_MAP",
@@ -906,6 +906,21 @@ if is_torch_available():
             "RobertaModel",
         ]
     )
+    _import_structure["models.visual_bert"].extend(
+        [
+            "VISUAL_BERT_PRETRAINED_MODEL_ARCHIVE_LIST",
+            "VisualBertForMultipleChoice",
+            "VisualBertForVQA",
+            "VisualBertForVQAAdvanced",
+            "VisualBertForNLVR",
+            "VisualBertForFlickr",
+            "VisualBertLayer",
+            "VisualBertModel",
+            "VisualBertPreTrainedModel",
+            "VisualBertForPreTraining"
+            # "load_tf_weights_in_visual_bert",
+        ]
+    )
     _import_structure["models.speech_to_text"].extend(
         [
             "SPEECH_TO_TEXT_PRETRAINED_MODEL_ARCHIVE_LIST",
@@ -1620,6 +1635,7 @@ if TYPE_CHECKING:
         TransfoXLCorpus,
         TransfoXLTokenizer,
     )
+    from .models.visual_bert import VISUAL_BERT_PRETRAINED_CONFIG_ARCHIVE_MAP, VisualBertConfig
     from .models.vit import VIT_PRETRAINED_CONFIG_ARCHIVE_MAP, ViTConfig
     from .models.wav2vec2 import (
         WAV_2_VEC_2_PRETRAINED_CONFIG_ARCHIVE_MAP,
@@ -2230,6 +2246,19 @@ if TYPE_CHECKING:
             TransfoXLModel,
             TransfoXLPreTrainedModel,
             load_tf_weights_in_transfo_xl,
+        )
+        from .models.visual_bert import (
+            VISUAL_BERT_PRETRAINED_MODEL_ARCHIVE_LIST,
+            VisualBertForMultipleChoice,
+            VisualBertForVQA,
+            VisualBertForVQAAdvanced,
+            VisualBertForNLVR,
+            VisualBertForFlickr,
+            VisualBertLayer,
+            VisualBertModel,
+            VisualBertPreTrainedModel,
+            VisualBertForPreTraining,
+            # load_tf_weights_in_visual_bert,
         )
         from .models.vit import (
             VIT_PRETRAINED_MODEL_ARCHIVE_LIST,

@@ -72,6 +72,7 @@ from . import (
     t5,
     tapas,
     transfo_xl,
+    visual_bert,
     vit,
     wav2vec2,
     xlm,

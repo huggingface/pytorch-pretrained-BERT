@@ -19,8 +19,6 @@ import warnings
 from collections import OrderedDict
 
 from ...utils import logging
-
-# Add modeling imports here
 from ..albert.modeling_albert import (
     AlbertForMaskedLM,
     AlbertForMultipleChoice,
@@ -256,6 +254,17 @@ from ..tapas.modeling_tapas import (
     TapasModel,
 )
 from ..transfo_xl.modeling_transfo_xl import TransfoXLForSequenceClassification, TransfoXLLMHeadModel, TransfoXLModel
+
+# Add modeling imports here
+from ..visual_bert.modeling_visual_bert import (
+    VisualBertForMultipleChoice,
+    VisualBertForPreTraining,
+    VisualBertForVQA,
+    VisualBertForVQAAdvanced,
+    VisualBertForNLVR,
+    VisualBertForFlickr,
+    VisualBertModel,
+)
 from ..vit.modeling_vit import ViTForImageClassification, ViTModel
 from ..wav2vec2.modeling_wav2vec2 import Wav2Vec2ForMaskedLM, Wav2Vec2Model
 from ..xlm.modeling_xlm import (
@@ -337,6 +346,7 @@ from .configuration_auto import (
     T5Config,
     TapasConfig,
     TransfoXLConfig,
+    VisualBertConfig,
     ViTConfig,
     Wav2Vec2Config,
     XLMConfig,
@@ -352,6 +362,7 @@ logger = logging.get_logger(__name__)
 MODEL_MAPPING = OrderedDict(
     [
         # Base model mapping
+        (VisualBertConfig, VisualBertModel),
         (BigBirdPegasusConfig, BigBirdPegasusModel),
         (DeiTConfig, DeiTModel),
         (LukeConfig, LukeModel),
@@ -411,6 +422,7 @@ MODEL_MAPPING = OrderedDict(
 MODEL_FOR_PRETRAINING_MAPPING = OrderedDict(
     [
         # Model for pre-training mapping
+        (VisualBertConfig, VisualBertForPreTraining),
         (LayoutLMConfig, LayoutLMForMaskedLM),
         (RetriBertConfig, RetriBertModel),
         (T5Config, T5ForConditionalGeneration),
@@ -442,6 +454,7 @@ MODEL_FOR_PRETRAINING_MAPPING = OrderedDict(
         (IBertConfig, IBertForMaskedLM),
         (DebertaConfig, DebertaForMaskedLM),
         (DebertaV2Config, DebertaV2ForMaskedLM),
+
     ]
 )
 
@@ -536,6 +549,7 @@ MODEL_FOR_IMAGE_CLASSIFICATION_MAPPING = OrderedDict(
 MODEL_FOR_MASKED_LM_MAPPING = OrderedDict(
     [
         # Model for Masked LM mapping
+        (VisualBertConfig, VisualBertForVQAAdvanced),
         (BigBirdConfig, BigBirdForMaskedLM),
         (Wav2Vec2Config, Wav2Vec2ForMaskedLM),
         (ConvBertConfig, ConvBertForMaskedLM),
@@ -589,6 +603,9 @@ MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING = OrderedDict(
 MODEL_FOR_SEQUENCE_CLASSIFICATION_MAPPING = OrderedDict(
     [
         # Model for Sequence Classification mapping
+        (VisualBertConfig, VisualBertForFlickr),
+        (VisualBertConfig, VisualBertForNLVR),
+        (VisualBertConfig, VisualBertForVQA),
         (BigBirdPegasusConfig, BigBirdPegasusForSequenceClassification),
         (BigBirdConfig, BigBirdForSequenceClassification),
         (ConvBertConfig, ConvBertForSequenceClassification),
@@ -696,6 +713,7 @@ MODEL_FOR_TOKEN_CLASSIFICATION_MAPPING = OrderedDict(
 MODEL_FOR_MULTIPLE_CHOICE_MAPPING = OrderedDict(
     [
         # Model for Multiple Choice mapping
+        (VisualBertConfig, VisualBertForMultipleChoice),
         (BigBirdConfig, BigBirdForMultipleChoice),
         (ConvBertConfig, ConvBertForMultipleChoice),
         (CamembertConfig, CamembertForMultipleChoice),
