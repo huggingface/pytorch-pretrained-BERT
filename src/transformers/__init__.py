@@ -39,6 +39,20 @@ else:
 
 from typing import TYPE_CHECKING
 
+
+# Integrations: import before any ML framework
+# isort: off
+from .integrations import (
+    is_comet_available,
+    is_optuna_available,
+    is_ray_available,
+    is_ray_tune_available,
+    is_tensorboard_available,
+    is_wandb_available,
+)
+
+# isort: on
+
 # Check the dependencies satisfy the minimal versions required.
 from . import dependency_versions_check
 from .file_utils import (
