@@ -106,6 +106,7 @@ from ..deberta_v2.modeling_deberta_v2 import (
 )
 from ..deit.modeling_deit import DeiTForImageClassification, DeiTForImageClassificationWithTeacher, DeiTModel
 from ..distilbert.modeling_distilbert import (
+    DistilBertForCausalLM,
     DistilBertForMaskedLM,
     DistilBertForMultipleChoice,
     DistilBertForQuestionAnswering,
@@ -462,6 +463,7 @@ MODEL_WITH_LM_HEAD_MAPPING = OrderedDict(
         (DistilBertConfig, DistilBertForMaskedLM),
         (AlbertConfig, AlbertForMaskedLM),
         (CamembertConfig, CamembertForMaskedLM),
+        (DistilBertConfig, DistilBertForCausalLM),
         (XLMRobertaConfig, XLMRobertaForMaskedLM),
         (MarianConfig, MarianMTModel),
         (FSMTConfig, FSMTForConditionalGeneration),
@@ -501,6 +503,7 @@ MODEL_FOR_CAUSAL_LM_MAPPING = OrderedDict(
         (CamembertConfig, CamembertForCausalLM),
         (XLMRobertaConfig, XLMRobertaForCausalLM),
         (RobertaConfig, RobertaForCausalLM),
+        (DistilBertConfig, DistilBertForCausalLM),
         (BertConfig, BertLMHeadModel),
         (OpenAIGPTConfig, OpenAIGPTLMHeadModel),
         (GPT2Config, GPT2LMHeadModel),

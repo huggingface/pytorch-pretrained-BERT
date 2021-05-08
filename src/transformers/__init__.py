@@ -644,6 +644,7 @@ if is_torch_available():
     _import_structure["models.distilbert"].extend(
         [
             "DISTILBERT_PRETRAINED_MODEL_ARCHIVE_LIST",
+            "DistilBertForCausalLM",
             "DistilBertForMaskedLM",
             "DistilBertForMultipleChoice",
             "DistilBertForQuestionAnswering",
@@ -1980,6 +1981,7 @@ if TYPE_CHECKING:
         )
         from .models.distilbert import (
             DISTILBERT_PRETRAINED_MODEL_ARCHIVE_LIST,
+            DistilBertForCausalLM,
             DistilBertForMaskedLM,
             DistilBertForMultipleChoice,
             DistilBertForQuestionAnswering,
